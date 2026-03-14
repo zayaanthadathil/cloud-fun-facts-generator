@@ -43,7 +43,7 @@ The project uses AWS Amplify, API Gateway, Lambda, DynamoDB, and Amazon Bedrock.
 - Amazon DynamoDB
 - Amazon Bedrock
 ## Project Structure
-
+```
 cloud-fun-facts-generator/
 │
 ├── index.html              # Frontend user interface (HTML, CSS, JavaScript)
@@ -53,6 +53,7 @@ cloud-fun-facts-generator/
 ├── demo.gif                   # Demo of the application
 │
 └── README.md               # Project documentation
+```
 ## API Endpoints
 
 ### GET /funfact
