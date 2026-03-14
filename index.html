@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Fun Facts Generator</title>
+    <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+background:linear-gradient(135deg,#ef4444 0%,#f97316 50%,#facc15 100%);
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.container{
+background:white;
+border-radius:18px;
+box-shadow:0 25px 50px rgba(0,0,0,0.25);
+padding:40px;
+max-width:700px;
+width:100%;
+text-align:center;
+}
+
+.title{
+font-size:2.5rem;
+margin-bottom:10px;
+background:linear-gradient(135deg,#ef4444,#f97316,#facc15);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+font-weight:700;
+}
+
+.subtitle{
+font-size:1.1rem;
+color:#555;
+margin-bottom:30px;
+}
+
+.fact-box{
+background:linear-gradient(135deg,#fee2e2,#fed7aa,#fef9c3);
+border-radius:16px;
+padding:30px;
+margin:30px 0;
+min-height:120px;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.fact-text{
+font-size:1.2rem;
+line-height:1.6;
+color:#1f2937;
+}
+
+.generate-btn{
+background:linear-gradient(135deg,#ef4444,#f97316);
+color:white;
+border:none;
+padding:14px 28px;
+font-size:1rem;
+font-weight:600;
+border-radius:12px;
+cursor:pointer;
+transition:all .25s ease;
+}
+
+.generate-btn:hover{
+transform:translateY(-2px);
+background:linear-gradient(135deg,#dc2626,#ea580c);
+}
+
+.generate-btn:disabled{
+opacity:.7;
+cursor:not-allowed;
+transform:none;
+}
+
+hr{
+border:none;
+height:2px;
+background:linear-gradient(90deg,#ef4444,#f97316,#facc15);
+margin:30px 0;
+}
+
+#factsList{
+padding:0;
+}
+
+#factsList li{
+list-style:none;
+background:linear-gradient(135deg,#fff1f2,#ffedd5,#fefce8);
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
+border-left:5px solid #f97316;
+}
+
+input{
+font-size:1rem;
+padding:10px;
+border-radius:8px;
+border:1px solid #ccc;
+width:100%;
+}
+
+input:focus{
+outline:none;
+border:1px solid #f97316;
+box-shadow:0 0 0 2px rgba(249,115,22,0.2);
+}
+
+.tech-info{
+margin-top:30px;
+padding-top:20px;
+border-top:1px solid #eee;
+font-size:.9rem;
+color:#666;
+}
+
+.error{
+background:#fee2e2;
+color:#b91c1c;
+padding:15px;
+border-radius:10px;
+margin:20px 0;
+}
+
+@media(max-width:640px){
+.container{
+padding:30px 20px;
+}
+.title{
+font-size:2rem;
+}
+.fact-text{
+font-size:1.1rem;
+}
+}
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">☁️ Cloud Fun Facts</h1>
+        <p class="subtitle">Discover amazing facts about cloud computing!</p>
+
+        <div class="fact-box">
+            <p class="fact-text" id="factText">Click the button below to get a fun cloud fact!</p>
+        </div>
+
+        <button class="generate-btn" id="generateBtn" onclick="getFact()">
+            Generate Fun Fact
+        </button>
+        <hr style="margin:30px 0">
+
+<h3>Add Your Own Cloud Fact</h3>
+
+<input
+id="newFact"
+placeholder="Enter a cloud fact"
+style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;margin-top:10px"
+/>
+
+<button class="generate-btn" style="margin-top:15px" onclick="submitFact()">
+Submit Fact
+</button>
+
+<p id="submitMessage" style="margin-top:10px"></p>
+
+
+<hr style="margin:30px 0">
+
+<h3>All Cloud Facts</h3>
+
+<button class="generate-btn" onclick="loadFacts()">
+Show All Facts
+</button>
+
+<ul id="factsList" style="text-align:left;margin-top:15px"></ul>
+
+
+<hr style="margin:30px 0">
+
+<h3>Service Health</h3>
+
+<button class="generate-btn" onclick="checkHealth()">
+Check API Status
+</button>
+
+<p id="healthStatus"></p>
+
+        <div class="tech-info">
+            Powered by AWS Lambda + API Gateway + DynamoDB + Bedrock AI
+        </div>
+    </div>
+
+    <script>
+    const API_BASE = "https://4f2ycrie7c.execute-api.us-east-1.amazonaws.com";
+
+    async function getFact() {
+        const btn = document.getElementById("generateBtn");
+        const factText = document.getElementById("factText");
+
+        btn.disabled = true;
+        btn.textContent = "Loading...";
+        factText.textContent = "Getting your fact...";
+        factText.className = "fact-text loading";
+
+        try {
+            const response = await fetch(API_BASE + "/funfact");
+            const data = await response.json();
+
+            if (response.ok) {
+                factText.textContent = data.fact;
+                factText.className = "fact-text";
+            } else {
+                factText.innerHTML = '<div class="error">Could not fetch fact.</div>';
+            }
+        } catch (error) {
+            factText.innerHTML = '<div class="error">Could not fetch fact. Check your API endpoint!</div>';
+            console.error("Error:", error);
+        }
+
+        btn.disabled = false;
+        btn.textContent = "Generate Another Fact";
+    }
+
+    async function submitFact() {
+        const factInput = document.getElementById("newFact");
+        const message = document.getElementById("submitMessage");
+
+        const fact = factInput.value.trim();
+
+        if (fact.length < 5) {
+            message.textContent = "Fact must be at least 5 characters";
+            message.style.color = "red";
+            return;
+        }
+
+        message.textContent = "Submitting...";
+        message.style.color = "#667eea";
+
+        try {
+            const response = await fetch(API_BASE + "/fact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ fact: fact })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                message.textContent = data.message || "Fact added successfully";
+                message.style.color = "green";
+                factInput.value = "";
+            } else {
+                message.textContent = data.error || "Could not add fact";
+                message.style.color = "red";
+            }
+        } catch (error) {
+            message.textContent = "Submission failed";
+            message.style.color = "red";
+            console.error("Error:", error);
+        }
+    }
+
+    async function loadFacts() {
+        const list = document.getElementById("factsList");
+
+        list.innerHTML = "<li>Loading...</li>";
+
+        try {
+            const response = await fetch(API_BASE + "/facts");
+            const data = await response.json();
+
+            list.innerHTML = "";
+
+            if (response.ok && data.facts && data.facts.length > 0) {
+                data.facts.forEach(f => {
+                    const li = document.createElement("li");
+                    li.textContent = f.FactText;
+                    list.appendChild(li);
+                });
+            } else {
+                list.innerHTML = "<li>No facts found.</li>";
+            }
+        } catch (error) {
+            list.innerHTML = "<li>Error loading facts</li>";
+            console.error("Error:", error);
+        }
+    }
+
+    async function checkHealth() {
+        const status = document.getElementById("healthStatus");
+
+        status.textContent = "Checking...";
+        status.style.color = "#667eea";
+
+        try {
+            const response = await fetch(API_BASE + "/health");
+            const data = await response.json();
+
+            if (response.ok) {
+                status.textContent = "Service Status: " + data.status;
+                status.style.color = "green";
+            } else {
+                status.textContent = "Health check failed";
+                status.style.color = "red";
+            }
+        } catch (error) {
+            status.textContent = "API unreachable";
+            status.style.color = "red";
+            console.error("Error:", error);
+        }
+    }
+
+    window.onload = function() {
+        if (API_BASE.includes("YOUR-API-ID")) {
+            document.getElementById("factText").innerHTML =
+                '<div class="error">Please update API_BASE with your actual API Gateway endpoint</div>';
+        }
+    };
+</script>
+</body>
+</html>
