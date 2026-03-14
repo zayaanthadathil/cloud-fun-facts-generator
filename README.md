@@ -25,6 +25,34 @@ The project uses AWS Amplify, API Gateway, Lambda, DynamoDB, and Amazon Bedrock.
    - Amazon DynamoDB to store and retrieve facts
    - Amazon Bedrock to rewrite facts into more engaging responses
 5. The processed result is returned to the frontend and displayed to the user.## Architecture Overview
+
+## Tech Stack
+
+### Frontend
+- HTML
+- CSS
+- JavaScript
+
+### Backend
+- Python
+- AWS Lambda
+
+### AWS Services
+- AWS Amplify
+- Amazon API Gateway
+- Amazon DynamoDB
+- Amazon Bedrock
+## Project Structure
+
+cloud-fun-facts-generator/
+│
+├── index.html              # Frontend user interface (HTML, CSS, JavaScript)
+├── lambda_function.py      # Python backend logic used in AWS Lambda
+│
+├── architecture-diagram.png   # AWS system architecture diagram
+├── demo.gif                   # Demo of the application
+│
+└── README.md               # Project documentation
 ## API Endpoints
 
 ### GET /funfact
@@ -43,22 +71,6 @@ Example request body:
   "fact": "AWS Lambda lets you run code without managing servers."
 }
 ```
-## Tech Stack
-
-### Frontend
-- HTML
-- CSS
-- JavaScript
-
-### Backend
-- Python
-- AWS Lambda
-
-### AWS Services
-- AWS Amplify
-- Amazon API Gateway
-- Amazon DynamoDB
-- Amazon Bedrock
 ## How It Works
 
 - The frontend is hosted using AWS Amplify.
