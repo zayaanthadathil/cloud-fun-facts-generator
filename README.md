@@ -2,6 +2,9 @@
 Cloud Fun Facts Generator is a serverless web application built on AWS.  
 It allows users to generate AI-enhanced cloud computing facts, submit new facts, view all stored facts, and check backend health status.  
 The project uses AWS Amplify, API Gateway, Lambda, DynamoDB, and Amazon Bedrock.
+## Demo
+
+![Application Demo](Demo.gif)
 ## Features
 
 - Generate random cloud facts enhanced with AI
