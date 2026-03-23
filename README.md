@@ -80,9 +80,7 @@ Example request body:
 - Lambda reads and writes cloud facts in DynamoDB.
 - For generated facts, Lambda sends the selected fact to Amazon Bedrock.
 - Bedrock rewrites the fact in a more engaging format before it is returned to the frontend.
-## Screenshots
 
-Project screenshots will be added here.
 ## Credits
 
 This project was inspired by the Cloud Fun Facts Generator tutorial from Zero to Cloud.  
